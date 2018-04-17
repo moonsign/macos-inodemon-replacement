@@ -19,4 +19,4 @@
 • 由于iNode本身的启动脚本使用的ps命令观察进程状态是不支持脚本的,所以这个iNodeMon是通过shc来编译脚本,生成可执行程序
 • 使用 ps -ef可以轻松看到 iNodeMon的脚本内容;
 • 安装shc 可以使用 brew install shc 来进行(不要问我brew是什么,我也不会告诉你不装后悔一辈子,这里自行了解 https://brew.sh)
-• 使用 shc -r -f iNodeMon.sh -o iNodeMon 即可对脚本进行编译并生成可执行
+• 使用 shc -r -f iNodeMon.sh -o iNodeMon 即可对脚本进行编译并生成可执行.
