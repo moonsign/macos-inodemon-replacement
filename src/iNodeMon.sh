@@ -109,7 +109,7 @@ _get_pid(){
 	# 	return
 	# fi
 	me="${MYSELF}"
-	pid="$(${PIDOFCMD} ${process} | grep -v "${me}")"
+	pid="$(${PIDOFCMD} ${process} | \grep -vw "${me}")"
 }
 
 _get_cpu(){
