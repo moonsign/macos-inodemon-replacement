@@ -1,8 +1,8 @@
-# macos-inode-mon-replacement
+# ✨macos-inode-mon-replacement
 
 > 从macOS catalina开始，**`iNodeMon`** 会遇到服务启动失败的问题😫，而且在macbook💻休眠或者断开电源时，**`AuthenMngService`** 进程可能会出现cpu占用过高的问题🥵。
 
-## 主要用途
+## 💊 功能主治
 
 * ✅扫除系统日志 **`system.log`** 中每 10 秒报一次的 iNodeMon 重启信息；
 
@@ -13,7 +13,7 @@
 
 
 
-## 部署方法
+## 🔨 部署方法
 
 1. 切换至超级用户，并根据提示输入 **当前用户** 的密码；
 
@@ -44,7 +44,7 @@
 
 
 
-## 关于可执行文件
+## 🗄 关于可执行文件
 
 - 由于iNode本身的启动脚本观察进程状态使用的 **`ps`** 命令是不支持查看脚本运行状态的的，所以需要将bash脚本转换为可执行程序；
 - 如果不想使用附件里面的 **`inodeMon`** 可以自行安装 **`shc`**，可以使用 **`brew install shc`** 来进行，**`brew`** 的使用可以前往[官网](https://brew.sh)自行了解。
@@ -57,13 +57,13 @@
 
 
 
-## 关于日志
+## 📃 关于日志
 
 - 日志位置在 **`/Library/Logs/iNode/`** 每天转存 **`.log`** 为 **`.old`**
 
 
 
-## 防止inode随macOS启动
+## 🚫 防止inode随macOS启动
 
 > 安装了inodeClient之后，在macOS系统启动时inode服务也会自动启动，如果不希望它自动启动，并在需要时手动启动，可以使用 **`inode.sh`**；
 
