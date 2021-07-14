@@ -1,41 +1,78 @@
 # macos-inode-mon-replacement
 
+> 从macOS catalina开始，**`iNodeMon`** 会遇到服务启动失败的问题😫，而且在macbook💻休眠或者断开电源时，**`AuthenMngService`** 进程可能会出现cpu占用过高的问题🥵。
+
 ## 主要用途
 
-1. 扫除系统日志 `system.log` 中每 10 秒报一次的 iNodeMon 重启信息(原始 iNodeMon 大概从catalina开始有问题，服务总是启动失败)
-2. 每分钟检测 `AuthenMngService` 进程状态,并执行一下操作
-   - 如果退出，则启动(原 iNodeMon 服务功能)(macOS，iNode 客户端版本 E517); 
-   - 如果 cpu 占用超过 80%，则重启;
+* ✅扫除系统日志 **`system.log`** 中每 10 秒报一次的 iNodeMon 重启信息；
+
+* ✅每分钟检测 **`AuthenMngService`** 进程状态，并执行以下操作：
+  - 服务退出自动重新启动；
+
+  * 如果cpu占用超过 **`80%`**，则重新启动;
+
+
 
 ## 部署方法
 
-1. 使用 `sudo -s` （输入自己用户的密码）来切换至超级用户;
-2. 用附件中的 `iNodeMon` 来替换 `/Applications/iNodeClient/iNodeMon`, 记得备份;
-3. 使用命令 `chmod a+x /Applications/iNodeClient/iNodeMon` 来赋予可执行权限;
-4. 执行 `/Applications/iNodeClient/StopService.sh` 来停掉现在的服务;
-5. 执行 `/Library/StartupItems/iNodeAuthService/iNodeAuthService start` 来启动服务;
-6. 使用 `exit` 或者 **`CTRL`** + **`D`** 退出超级用户;
+1. 切换至超级用户，并根据提示输入 **当前用户** 的密码；
+
+   ```bash
+   sudo -s
+   ```
+
+2. 停掉当前的inode相关服务；
+
+   ```bash
+   /Applications/iNodeClient/StopService.sh
+   ```
+
+3. 用附件中的 **`iNodeMon`** 来替换 **`/Applications/iNodeClient/iNodeMon`**, 记得备份；
+4. 对 **`iNodeMon`** 赋予可执行权限；
+
+   ```bash
+   chmod a+x /Applications/iNodeClient/iNodeMon
+   ```
+
+5. 重新启动inode相关服务；
+
+   ```bash
+   /Library/StartupItems/iNodeAuthService/iNodeAuthService start
+   ```
+
+6. 使用 **`exit`** 或者 **`CTRL`** + **`D`** 退出超级用户;
+
+
 
 ## 关于可执行文件
 
-- 由于 iNode 本身的启动脚本观察晋城状态使用的 `ps` 命令是不支持查看脚本运行状态的的，所以通过 `shc` 来编译脚本,生成可执行程序；
-- 如果不想使用附件里面的 `inodeMon` 可以自行安装 `shc`，可以使用 `brew install shc` 来进行，`brew` 的使用可以前往[官网](https://brew.sh)自行了解。
-- 执行 `shc -r -f iNodeMon.sh -o iNodeMon` 即可对脚本进行编译并生成可执行.
+- 由于iNode本身的启动脚本观察进程状态使用的 **`ps`** 命令是不支持查看脚本运行状态的的，所以需要将bash脚本转换为可执行程序；
+- 如果不想使用附件里面的 **`inodeMon`** 可以自行安装 **`shc`**，可以使用 **`brew install shc`** 来进行，**`brew`** 的使用可以前往[官网](https://brew.sh)自行了解。
+- 脚本进行编译并生成可执行需要在超级用户下进行，参考 **部署方法** 中切换超级用户的方法
+  
+   ```bash
+   cd /Applications/iNodeClient/
+   shc -r -f iNodeMon.sh -o iNodeMon
+   ```
+
+
 
 ## 关于日志
 
-- 日志位置在 `/Library/Logs/iNode/` 每天转存`.log` 为`.old`
+- 日志位置在 **`/Library/Logs/iNode/`** 每天转存 **`.log`** 为 **`.old`**
 
-## inode.sh的使用
 
-> 安装了inodeClient之后，在macOS系统启动时inode服务也会自动启动，如果不希望它自动启动，并在需要时手动启动，可以使用 `inode.sh`；
+
+## 防止inode随macOS启动
+
+> 安装了inodeClient之后，在macOS系统启动时inode服务也会自动启动，如果不希望它自动启动，并在需要时手动启动，可以使用 **`inode.sh`**；
 
 1. 首先执行以下命令，来取消inode相关服务在macOS启动是自动启动
 
    ```bash
-      sudo launchctl unload /Library/LaunchDaemons/com.apple.iNodeClient.plist
-      sudo rm -f /Library/LaunchDaemons/com.apple.iNodeClient.plist
+   sudo launchctl unload /Library/LaunchDaemons/com.apple.iNodeClient.plist
+   sudo rm -f /Library/LaunchDaemons/com.apple.iNodeClient.plist
    ```
 
-2. 将 `inode.sh` 放在 **`${PATH}`** 能找到的位置，例如 `/usr/local/bin/` 下；
-3. 执行 `inode.sh start|stop|restart` 来启动启动|停止|重启 `inode` 服务；
+2. 将 **`inode.sh`** 放在 **`${PATH}`** 能找到的位置，例如 **`/usr/local/bin/`** 下；
+3. 执行 **`inode.sh start|stop|restart`** 来启动启动|停止|重启 **`inode`** 服务；
