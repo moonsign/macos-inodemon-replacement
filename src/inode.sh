@@ -3,6 +3,7 @@ authService="/Library/StartupItems/iNodeAuthService/iNodeAuthService"
 if [[ $1 =~ ^(start|stop|restart)$ ]]; then
     if [[ $1 == "stop" ]]; then
         sudo launchctl unload /Library/LaunchDaemons/com.apple.iNodeClient.plist
+        sudo launchctl remove /Library/LaunchDaemons/com.apple.iNodeClient.plist
     fi
     sudo "${authService}" $1
 else
